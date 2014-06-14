@@ -1,0 +1,31 @@
+<footer class="site-footer">
+  <div class="container">
+    {% block footer_content %}
+      <nav class="footer-links">
+        {% block footer_nav %}
+          <ul class="unstyled">
+            {% block footer_links %}
+              <li><div class="ogd"><a href="http://www.data.gv.at/hintergrund-infos/cooperation-ogd-oesterreich/" target="_blank"><p>Cooperation OGD <span>:</span> &Ouml;sterreich</p></a></div></li>
+            {% endblock %}
+          </ul>
+          <ul class="unstyled">
+            {% block footer_links_ckan %}
+              <a href="/at.gv.brz.ogd/help">Hilfe</a> | <a href="http://www.data.gv.at/impressum">Impressum</a>
+            {% endblock %}
+          </ul>
+        {% endblock %}
+      </nav>
+      <div class="attribution">
+        {% block footer_attribution %}
+          <p>Basiert auf <a href="http://ckan.org" target="_blank">CKAN</a> v2.2</p>
+        {% endblock %}
+      </div>
+    {% endblock %}
+  </div>
+
+  {% block footer_debug %}
+    {% if g.debug %}
+      {% include 'snippets/debug.html' %}
+    {% endif %}
+  {% endblock %}
+</footer>

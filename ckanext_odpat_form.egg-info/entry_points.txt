@@ -1,0 +1,4 @@
+
+        [ckan.plugins]
+		odpat_form=ckanext.odpat_form.plugin:OdpatDatasetFormPlugin
+	

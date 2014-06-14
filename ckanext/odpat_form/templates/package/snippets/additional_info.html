@@ -1,0 +1,24 @@
+<section class="additional-info">
+  <h3>{{ _('Über diesen Datensatz') }}</h3>
+  <table class="table table-striped table-bordered table-condensed">
+    <tbody>
+      {% block package_additional_info %}
+      	{% block extras %}
+    		  {% for element in h.get_basic_metadata_fields() %}
+    		    <tr>
+    		      <th scope="row" class="dataset-label">{{ element[1].decode('utf-8') }}</th>
+    		      <td class="dataset-details">{{ pkg_dict[element[2]] }}</td>
+    		    </tr>
+    		  {% endfor %}
+    		  {% for element in h.get_extended_metadata_fields() %}
+    		    <tr>
+    		      <th scope="row" class="dataset-label">{{ element[1] }}</th>
+    		      <td class="dataset-details">{{ h.get_extras_from_basic(pkg_dict, element[2]) }}</td>
+    		    </tr>
+    		  {% endfor %}
+      	{% endblock %}
+      {% endblock %}
+    </tbody>
+  </table>
+</section>
+

@@ -1,0 +1,5 @@
+recursive-include ckanext/odpat_form/templates *
+recursive-include ckanext/odpat_form/public *
+recursive-include ckanext/odpat_form/lib *
+recursive-include ckanext/odpat_form/controllers *
+include setup.py

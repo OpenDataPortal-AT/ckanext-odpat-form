@@ -1,0 +1,53 @@
+{% import 'macros/form.html' as form %}
+
+{% block package_metadata_fields %}
+  {% block package_metadata_fields_schema %}
+    {{ form.input('schema_name', label=_('Bezeichnung der Metadatenstruktur'), id='field-schema_name', placeholder=_('zB OGD Austria Metadata 2.1'), value=data.schema_name, error=errors.schema_name, classes=['control-full']) }}
+
+    {{ form.input('schema_language', label=_('Kontaktseite der datenverantwortlichen Stelle'), id='field-schema_language', placeholder=_('zB ger'), value=data.schema_language, error=errors.schema_language, classes=['control-full']) }}
+
+    {{ form.input('schema_characterset', label=_('Kontaktseite der datenverantwortlichen Stelle'), id='field-schema_characterset', placeholder=_('zB utf-8'), value=data.schema_characterset, error=errors.schema_characterset, classes=['control-full']) }}
+  {% endblock %}
+
+  {% block package_metadata_fields_metadata_linkage %}
+    {{ form.input('metadata_linkage', label=_('Weiterführende Metadaten'), id='field-metadata_linkage', placeholder='', value=data.metadata_linkage, error=errors.metadata_linkage, classes=['control-full']) }}
+  {% endblock %}
+
+  {% block package_metadata_fields_attribute_description %}
+    {{ form.markdown('attribute_description', label=_('Attributbeschreibung'), id='field-attribute_description', placeholder='', value=data.attribute_description, error=errors.attribute_description) }}
+  {% endblock %}  
+
+  {% block package_metadata_fields_geo %}
+    {{ form.input('geographic_toponym', label=_('Geographische Abdeckung/Lage'), id='field-geographic_toponym', placeholder='', value=data.geographic_toponym, error=errors.geographic_toponym, classes=['control-full']) }}
+
+    {{ form.input('geographic_bbox', label=_('Geographische Ausdehnung'), id='field-geographic_bbox', placeholder='', value=data.geographic_bbox, error=errors.geographic_bbox, classes=['control-full']) }}
+  {% endblock %}
+
+  {% block package_basic_fields_update_frequency %}
+  <div class="control-group">
+    <label class="control-label" for="field-update_frequency">{{ _("Aktualisierungszyklus") }}</label>
+    <div class="controls">
+      <select id="field-update_frequency" name="update_frequency">
+        {% for freq_id, freq, f in h.frequencies %}
+            <option value="{{ freq_id }}" {% if not freq == '' and freq_id in data.get('update_frequency', []) %}selected="selected"{% endif %}>{{ freq }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  {% endblock %}
+
+  {% block package_metadata_fields_lineage %}
+    {{ form.input('lineage_quality', label=_('Datenqualität/Herkunft'), id='field-lineage_quality', placeholder='', value=data.lineage_quality, error=errors.lineage_quality, classes=['control-full']) }}
+
+    {{ form.input('en_title_and_desc', label=_('Titel und Beschreibung Englisch'), id='field-en_title_and_desc', placeholder='', value=data.en_title_and_desc, error=errors.en_title_and_desc, classes=['control-full']) }}
+
+    {{ form.input('license_citation', label=_('Lizenz Zitat'), id='field-license_citation', placeholder='', value=data.license_citation, error=errors.license_citation, classes=['control-full']) }}
+  {% endblock %}
+
+  {% block custom_fields %}
+  {% endblock %}
+
+  {% block dataset_fields %}
+  {% endblock %}
+
+{% endblock %}
