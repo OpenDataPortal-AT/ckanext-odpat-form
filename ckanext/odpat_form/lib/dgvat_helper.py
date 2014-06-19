@@ -94,10 +94,14 @@ def get_extras_from_basic(pkg, element):
             for c in cat:
                 catList += get_categorization_by_id(c) + ", "
             return catList[:-2]
-    elif el == 'begin_datetime' or el == 'end_datetime':
+    elif el == 'begin_datetime' or el == 'end_datetime' or el == 'metadata_modified':
         if found:
             return datetime.strptime(found, "%Y-%m-%dT%H:%M:%S").strftime("%d.%m.%Y %H:%M:%S")
-
+    elif el == 'metadata_identifier':
+        if found:
+            return found
+        else: 
+            return pkg.get('id')
     return found  
 
 def get_label_by_field(label):

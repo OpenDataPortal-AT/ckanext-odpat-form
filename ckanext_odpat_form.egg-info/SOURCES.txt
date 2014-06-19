@@ -7,15 +7,16 @@ ckanext/odpat_form/controllers/__init__.py
 ckanext/odpat_form/controllers/__init__.pyc
 ckanext/odpat_form/controllers/data_gv_at.pyc
 ckanext/odpat_form/controllers/odpat.py
+ckanext/odpat_form/controllers/odpat.pyc
 ckanext/odpat_form/lib/__init__.py
 ckanext/odpat_form/lib/__init__.pyc
 ckanext/odpat_form/lib/dgvat_helper.py
 ckanext/odpat_form/lib/dgvat_helper.pyc
-ckanext/odpat_form/templates/footer.html
 ckanext/odpat_form/templates/package/__init__.py
 ckanext/odpat_form/templates/package/resource_read.html
 ckanext/odpat_form/templates/package/snippets/additional_info.html
 ckanext/odpat_form/templates/package/snippets/package_basic_fields.html
+ckanext/odpat_form/templates/package/snippets/package_form.html
 ckanext/odpat_form/templates/package/snippets/package_metadata_fields.html
 ckanext/odpat_form/templates/package/snippets/resource_form.html
 ckanext_odpat_form.egg-info/PKG-INFO

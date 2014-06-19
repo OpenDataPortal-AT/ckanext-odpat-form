@@ -46,6 +46,10 @@ class OdpatDatasetFormPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm
         map.connect('/dataset/edit/{id}', controller='ckanext.odpat_form.controllers.odpat:OdpatPackageController', action='edit')
         map.connect('/dataset/{id}.{format}', controller='ckanext.odpat_form.controllers.odpat:OdpatPackageController', action='read')
         map.connect('/dataset/{id}', controller='ckanext.odpat_form.controllers.odpat:OdpatPackageController', action='read')
+        map.connect('/dataset/{id}/resource/{resource_id}', controller='ckanext.odpat_form.controllers.odpat:OdpatPackageController', action='resource_read')
+        map.connect('/dataset/{id}/resource/{resource_id}/embed', controller='ckanext.odpat_form.controllers.odpat:OdpPackageController', action='resource_embedded_dataviewer')
+        map.connect('/dataset/{id}/resource_edit/{resource_id}', controller='ckanext.odpat_form.controllers.odpat:OdpatPackageController', action='resource_edit')     
+        map.connect('/dataset/new_resource/{id}', controller='ckanext.odpat_form.controllers.odpat:OdpatPackageController', action='new_resource')
         return map
 
     def after_map(self, map):
@@ -67,34 +71,71 @@ class OdpatDatasetFormPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm
 
     def _modify_package_schema(self, schema):
         schema.update({
-            'schema_name': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'maintainer_link': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'schema_language': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'schema_characterset': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'date_released': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'begin_datetime': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'end_datetime': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'metadata_linkage': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'attribute_description': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'publisher': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'geographic_toponym': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'geographic_bbox': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'lineage_quality': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'en_title_and_desc': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'license_citation':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'metadata_identifier':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'metadata_modified':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'date_updated':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'publishing_date':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'publishing_state':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
-            'log_message': [toolkit.get_validator('ignore_missing')],
-            'update_frequency': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
+            'schema_name': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({
+            'maintainer_link': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({
+            'schema_language': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({            
+            'schema_characterset': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({
+            #'date_released': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
+            'begin_datetime': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({
+            'end_datetime': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({            
+            'metadata_linkage': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({            
+            'attribute_description': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({            
+            'publisher': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({   
+            'geographic_toponym': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({               
+            'geographic_bbox': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({               
+            'lineage_quality': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({               
+            'en_title_and_desc': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({   
+            'license_citation':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({               
+            'metadata_identifier':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({               
+            'metadata_original_portal':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })        
+        # schema.update({               
+        #     'metadata_modified':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
+        #     })
+        #schema.update({               
+            #'date_updated':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
+            #'publishing_date':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')],
+            #'publishing_state':[toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+        #    })
+        schema.update({               
+            'update_frequency': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
+            })
+        schema.update({
             'categorization': [toolkit.get_validator('ignore_missing'), toolkit.get_converter('convert_to_extras')]
-        })
-
+            })
         schema['resources'].update({
                     'language':[toolkit.get_validator('ignore_missing')],
-                    'characterset':[toolkit.get_validator('ignore_missing')],
+                    'characterset':[toolkit.get_validator('ignore_missing')]
                 })
         return schema
 
@@ -110,10 +151,10 @@ class OdpatDatasetFormPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm
 
     def show_package_schema(self):
         schema = super(OdpatDatasetFormPlugin, self).show_package_schema()
-        schema['resources'].update({
-                    'language':[toolkit.get_validator('ignore_missing')],
-                    'characterset':[toolkit.get_validator('ignore_missing')],
-                })
+        #schema['resources'].update({
+        #            'language':[toolkit.get_validator('ignore_missing')],
+        #            'characterset':[toolkit.get_validator('ignore_missing')],
+        #        })
         return schema
 
     def is_fallback(self):
