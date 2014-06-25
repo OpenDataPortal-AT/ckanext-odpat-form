@@ -6,13 +6,14 @@
       	{% block extras %}
     		  {% for element in h.get_basic_metadata_fields() %}
     		    <tr>
-    		      <th scope="row" class="dataset-label">{{ element[1].decode('utf-8') }}</th>
+    		      <th scope="row" class="dataset-label">{{ element[1].decode('utf-8') }} &nbsp;<img alt="{{ h.get_metadata_description_by_id(element[2])}}" title="{{ h.get_metadata_description_by_id(element[2])}}" src="/img/help.png" class="help" onmouseover="this.src = '/img/help_hover.png';" onmouseout="this.src = '/img/help.png';" /></th>
+              
     		      <td class="dataset-details">{{ pkg_dict[element[2]] }}</td>
     		    </tr>
     		  {% endfor %}
     		  {% for element in h.get_extended_metadata_fields() %}
     		    <tr>
-    		      <th scope="row" class="dataset-label">{{ element[1] }}</th>
+    		      <th scope="row" class="dataset-label">{{ element[1] }} &nbsp;<img alt="{{ element[4] }}" title="{{ element[4] }}" src="/img/help.png" class="help" onmouseover="this.src = '/img/help_hover.png';" onmouseout="this.src = '/img/help.png';"  /></th>
     		      <td class="dataset-details">{{ h.get_extras_from_basic(pkg_dict, element[2]) }}</td>
     		    </tr>
     		  {% endfor %}

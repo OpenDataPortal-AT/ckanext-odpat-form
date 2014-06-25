@@ -67,6 +67,8 @@ class OdpatDatasetFormPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm
                  'get_extras_from_basic': dgvat_helper.get_extras_from_basic,
                  'get_label_by_field': dgvat_helper.get_label_by_field,
                  'get_cat_by_id': dgvat_helper.get_categorization_by_id,
+                 'get_metadata_description_by_id': dgvat_helper.get_metadata_description_by_id,
+                 'get_metadata_example_by_id': dgvat_helper.get_metadata_example_by_id,
                 }
 
     def _modify_package_schema(self, schema):

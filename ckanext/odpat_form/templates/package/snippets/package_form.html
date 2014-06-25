@@ -7,7 +7,13 @@ then itself be extended to add/remove blocks of functionality. #}
   {% block stages %}
     {{ h.snippet('package/snippets/stages.html', stages=stage) }}
   {% endblock %}
-
+<div class="alert alert-error error-explanation" id="error_div" style="display:none;">
+<h2>Fehler im Formular</h2>
+<p>Das Formular enthält unzulässige Einträge:</p>
+<ul id="error_list">
+  <script>var global_form_errors = {};</script>
+</ul>
+</div>
   <input type="hidden" name="_ckan_phase" value="dataset_new_1" />
   {# pkg_name used in 3 stage edit #}
   <input type="hidden" name="pkg_name" value="{{ data.id }}" />
@@ -38,7 +44,7 @@ then itself be extended to add/remove blocks of functionality. #}
           <a class="btn btn-danger pull-left" href="{% url_for controller='package', action='delete', id=data.id %}" data-module="confirm-action" data-module-i18n="{{ locale }}">{% block delete_button_text %}{{ _('Delete') }}{% endblock %}</a>
         {% endif %}
       {% endblock %}
-      <button class="btn btn-primary" type="submit" name="save">{% block save_button_text %}{{ _('Next: Add Data') }}{% endblock %}</button>
+      <button class="btn btn-primary" type="submit" name="save" onclick="return openSummary()">{% block save_button_text %}{{ _('Next: Add Data') }}{% endblock %}</button>
       {{ form.required_message() }}
     </div>
   {% endblock %}
