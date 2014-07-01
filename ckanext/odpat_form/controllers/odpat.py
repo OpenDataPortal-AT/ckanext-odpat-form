@@ -246,11 +246,12 @@ class OdpatPackageController(ckan.controllers.package.PackageController):
             data_dict['type'] = package_type
             context['message'] = data_dict.get('log_message', '')        
             pkg_dict = get_action('package_create')(context, data_dict)
-            log.fatal(pkg_dict)
+            #log.info(pkg_dict)
             data_dict['id'] = pkg_dict['id']       
             data_dict['metadata_identifier']  = pkg_dict['id']
             data_dict['metadata_modified'] = pkg_dict['metadata_created']
-            data_dict['publisher'] = pkg_dict['organization'].get('title')
+            if pkg_dict['organization']:
+                data_dict['publisher'] = pkg_dict['organization'].get('title')
             get_action('package_update')(context, data_dict)            
 
             if ckan_phase:
@@ -286,6 +287,75 @@ class OdpatPackageController(ckan.controllers.package.PackageController):
             data_dict['state'] = 'none'
             return self.new(data_dict, errors, error_summary)
 
+
+    def new_metadata(self, id, data=None, errors=None, error_summary=None):
+        ''' FIXME: This is a temporary action to allow styling of the
+        forms. '''
+        context = {'model': model, 'session': model.Session,
+                   'user': c.user or c.author, 'auth_user_obj': c.userobj}
+
+        if request.method == 'POST' and not data:
+            save_action = request.params.get('save')
+            data = data or clean_dict(dict_fns.unflatten(tuplize_dict(parse_params(
+                request.POST))))
+            # we don't want to include save as it is part of the form
+            del data['save']
+
+            pkg_dict = get_action('package_show')(context, {'id': id})
+            data_dict = {}
+            data_dict['id'] = id
+            # update the state
+            if save_action == 'finish':
+                # we want this to go live when saved
+                data_dict['state'] = 'active'
+            elif save_action in ['go-resources', 'go-dataset']:
+                data_dict['state'] = 'draft-complete'
+            # allow the state to be changed
+            context['allow_state_change'] = True
+
+            data_dict = pkg_dict
+            data_dict.update(data)
+            data_dict[u'attribute_description'] = data['attribute_description']
+            data_dict[u'geographic_toponym'] = data['geographic_toponym']
+            data_dict[u'geographic_bbox'] = data['geographic_bbox']
+            data_dict[u'lineage_quality'] = data['lineage_quality']
+            data_dict[u'en_title_and_desc'] = data['en_title_and_desc']
+            data_dict[u'license_citation'] = data['license_citation']
+            log.fatal(data)
+            log.fatal(data_dict)
+            try:
+                pkg = get_action('package_update')(context, data_dict)
+                pkg2 = get_action('make_latest_pending_package_active')(context, data_dict)
+                log.fatal("after update2: %s" % pkg2)
+            except ValidationError, e:
+                errors = e.error_dict
+                error_summary = e.error_summary
+                return self.new_metadata(id, data, errors, error_summary)
+            except NotAuthorized:
+                abort(401, _('Unauthorized to update dataset'))
+            if save_action == 'go-resources':
+                # we want to go back to the add resources form stage
+                redirect(h.url_for(controller='package',
+                                   action='new_resource', id=id))
+            elif save_action == 'go-dataset':
+                # we want to go back to the add dataset stage
+                redirect(h.url_for(controller='package',
+                                   action='edit', id=id))
+
+            redirect(h.url_for(controller='package', action='read', id=id))
+
+        if not data:
+            data = get_action('package_show')(context, {'id': id})
+        errors = errors or {}
+        error_summary = error_summary or {}
+        vars = {'data': data, 'errors': errors, 'error_summary': error_summary}
+        vars['pkg_name'] = id
+
+        package_type = self._get_package_type(id)
+        self._setup_template_variables(context, {},
+                                       package_type=package_type)
+
+        return render('package/new_package_metadata.html', extra_vars=vars)
 
     def read(self, id, format='html'):
         if not format == 'html':
@@ -390,8 +460,8 @@ class OdpatPackageController(ckan.controllers.package.PackageController):
                 context['pending'] = False
             data_dict['id'] = name_or_id
 
-            pkg = get_action('package_update')(context, data_dict)
-            data_dict['publisher'] = pkg['organization'].get('title')
+            #log.fatal("-----------> data dict: % s" % data_dict)
+
             pkg = get_action('package_update')(context, data_dict)
             if request.params.get('save', '') == 'Approve':
                 get_action('make_latest_pending_package_active')(

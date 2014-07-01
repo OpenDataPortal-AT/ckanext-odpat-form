@@ -1,11 +1,14 @@
 {% import 'macros/form.html' as form %}
 
 {% block package_basic_fields_id %}
-  {{ form.input('metadata_identifier', id='field-metadata_identifier', label=_('Eindeutiger Identifikator'), placeholder=_('Wird automatisch generiert'), value=data.metadata_identifier, error=errors.metadata_identifier, classes=['control-medium'], attrs={'readonly': readonly}) }}
+  {% call form.input('metadata_identifier', id='field-metadata_identifier', label=_('Eindeutiger Identifikator'), placeholder=_('Wird automatisch generiert'), value=data.metadata_identifier, error=errors.metadata_identifier, classes=['control-medium'], attrs={'readonly': readonly}, description=h.get_metadata_description_by_id('metadata_identifier'))  %}
+  {% endcall %}
 {% endblock %}
 
 {% block package_basic_fields_title %}
-  {{ form.input('title', id='field-title', label=_('Title'), placeholder=_('eg. A descriptive title'), value=data.title, error=errors.title, classes=['control-full'], attrs={'data-module': 'slug-preview-target'}, is_required=true) }}
+  {% call form.input('title', id='field-title', label=_('Title'), placeholder=h.get_metadata_example_by_id('title'), value=data.title, error=errors.title, classes=['control-full'], attrs={'data-module': 'slug-preview-target'}, is_required=true, description=h.get_metadata_description_by_id('title'))  %}
+    <span class="example">zB {{ h.get_metadata_example_by_id('title') }}</span>
+  {% endcall %}
 {% endblock %}
 
 {% block package_basic_fields_url %}
@@ -14,22 +17,27 @@
   {% set domain = domain|replace("http://", "")|replace("https://", "") %}
   {% set attrs = {'data-module': 'slug-preview-slug', 'data-module-prefix': domain, 'data-module-placeholder': '<dataset>'} %}
 
-  {{ form.prepend('name', id='field-name', label=_('URL'), prepend=prefix, placeholder=_('eg. my-dataset'), value=data.name, error=errors.name, classes=['control-full'], attrs=attrs, is_required=true) }}
+  {% call form.prepend('name', id='field-name', label=_('URL'), prepend=prefix, placeholder=_('eg. my-dataset'), value=data.name, error=errors.name, classes=['control-full'], attrs=attrs, is_required=true) %}
+
+  {% endcall %}
 {% endblock %}
 
 {% block package_basic_fields_custom %}{% endblock %}
 
 {% block package_basic_fields_date %}
-  {{ form.input('metadata_modified', id='field-metadata_modified', label=_('Datum des Metadatensatzes'), placeholder=_('Wird automatisch generiert'), value=h.render_datetime(data.metadata_modified, "%d.%m.%Y %H:%M:%S"), error=errors.metadata_modified, classes=['control-full'], is_required=true, attrs={'readonly': readonly}) }}
+  {% call form.input('metadata_modified', id='field-metadata_modified', label=_('Datum des Metadatensatzes'), placeholder=_('Wird automatisch generiert'), value=data.metadata_modified, error=errors.metadata_modified, classes=['control-full'],is_required=true, attrs={'readonly': readonly}, description=h.get_metadata_description_by_id('metadata_modified'))  %}
+  {% endcall %}
 {% endblock %}
 
 {% block package_basic_fields_description %}
-  {{ form.markdown('notes', id='field-notes', label=_('Description'), placeholder=_('eg. Some useful notes about the data'), value=data.notes, error=errors.notes, is_required=true) }}
+  {% call form.markdown('notes', id='field-notes', label=_('Description'), placeholder=h.get_metadata_example_by_id('description'), value=data.notes, error=errors.notes, is_required=true, description=h.get_metadata_description_by_id('description'))  %}
+    <span class="example">zB {{ h.get_metadata_example_by_id('description') }}</span>
+  {% endcall %}
 {% endblock %}
 
 {% block package_basic_fields_category %}
   <div class="control-group control-full">
-    <label class="control-label" for="field-categorization">{{ _("Kategorie") }}</label>
+    <label class="control-label" for="field-categorization"><span title="Dieses Feld ist erforderlich" class="control-required">*</span> {{ _("Kategorie") }}  <img src="/img/help.png" alt="{{h.get_metadata_description_by_id('categorization')}}" title="{{ h.get_metadata_description_by_id('categorization') }}" class="help" onmouseover="this.src = '/img/help_hover.png';" onmouseout="this.src = '/img/help.png';" /></label>
     <div class="controls">
       <select id="field-categorization" name="categorization" size="14" multiple="multiple">
         {% for category, cat_id in h.categories if not category == '' %}
@@ -37,36 +45,42 @@
         {% endfor %}
       </select>
     </div>
+    <span class="example">Mehrfachauswahl möglich!</span>
   </div>
 {% endblock %}
 
 {% block package_basic_fields_tags %}
   {% set tag_attrs = {'data-module': 'autocomplete', 'data-module-tags': '', 'data-module-source': '/api/2/util/tag/autocomplete?incomplete=?'} %}
-  {{ form.input('tag_string', id='field-tags', label=_('Tags'), placeholder=_('eg. economy, mental health, government'), value=data.tag_string, error=errors.tags, classes=['control-full'], attrs=tag_attrs, is_required=true) }}
+  {% call form.input('tag_string', id='field-tags', label=_('Tags'), placeholder=h.get_metadata_example_by_id('keywords'), value=data.tag_string, error=errors.tags, classes=['control-full'], attrs=tag_attrs, is_required=true, description=h.get_metadata_description_by_id('keywords'))  %}<br />
+    <span class="example">zB {{ h.get_metadata_example_by_id('keywords') }}</span>
+  {% endcall %}
 {% endblock %}
 
 {% block package_metadata_fields_maintainer %}
-{{ form.input('maintainer', label=_('Datenverantwortliche Stelle'), id='field-maintainer', placeholder='', value=data.maintainer, error=errors.maintainer, classes=['control-full'], is_required=true) }}
+{% call form.input('maintainer', label=_('Datenverantwortliche Stelle'), id='field-maintainer', placeholder=h.get_metadata_example_by_id('maintainer'), value=data.maintainer, error=errors.maintainer, classes=['control-full'], is_required=true, description=h.get_metadata_description_by_id('maintainer'))  %}
+    <span class="example">zB {{ h.get_metadata_example_by_id('maintainer') }}</span>
+  {% endcall %}
 
-{{ form.input('maintainer_link', label=_('Kontaktseite der datenverantwortlichen Stelle'), id='field-maintainer-link', placeholder='', value=data.maintainer_link, error=errors.maintainer_link, classes=['control-full'], is_required=true) }}
+{% call form.input('maintainer_link', label=_('Kontaktseite der datenverantwortlichen Stelle'), id='field-maintainer-link', placeholder=h.get_metadata_example_by_id('maintainer_link'), value=data.maintainer_link, error=errors.maintainer_link, classes=['control-full'], is_required=true, description=h.get_metadata_description_by_id('maintainer_link'))  %}
+    <span class="example">zB {{ h.get_metadata_example_by_id('maintainer_link') }}</span>
+  {% endcall %}
 {% endblock %}
 
 {% block package_basic_fields_license %}
 <div class="control-group control-full">
   {% set error = errors.license_id %}
-  <label class="control-label" for="field-license">{{ _("License") }}</label>
+  <label class="control-label" for="field-license"><span title="Dieses Feld ist erforderlich" class="control-required">*</span> {{ _("License") }} <img src="/img/help.png" alt="{{h.get_metadata_description_by_id('license')}}" title="{{ h.get_metadata_description_by_id('license') }}" class="help" onmouseover="this.src = '/img/help_hover.png';" onmouseout="this.src = '/img/help.png';" /></label>
   <div class="controls">
     <select id="field-license" name="license_id" data-module="autocomplete">
       {% for license_desc, license_id in licenses|sort if license_desc  %}
-        <option value="{{ license_id }}" {% if data.get('license_id', 'notspecified') == license_id %}selected="selected"{% endif %}>{{ license_desc }}</option>
+        <option value="{{ license_id }}" {% if data.get('license_id', 'notspecified') == license_id %}selected="selected"{% elif data.get('license_id', 'notspecified') == 'notspecified' and license_id == 'cc-zero'%}selected="selected"{% endif %}>{{ license_desc }}</option>
       {% endfor %}
     </select>
     {% if error %}<span class="error-block">{{ error }}</span>{% endif %}
     <br />
     <span class="info-block info-inline">
       {% trans %}
-        License definitions and additional information can be found
-        at <a href="http://opendefinition.org/licenses/">opendefinition.org</a>
+        Weitere Informationen zur gewählten Lizenz finden Sie unter <a href="http://opendefinition.org/licenses/" id="license_link" target="_blank">opendefinition.org</a>
       {% endtrans %}
     </span>
   </div>
@@ -74,9 +88,13 @@
 {% endblock %}
 
 {% block package_basic_fields_datetime %}
-{{ form.input('begin_datetime', id='field-begin_datetime', type='datetime', label=_('Zeitliche Ausdehnung (Anfang)'), placeholder=_('zB 2014-01-01T00:00:00.000'), value=data.begin_datetime, error=errors.begin_datetime, classes=['control-full'], attrs={'data-module': 'date'}, is_required=true) }}
+{% call form.input('begin_datetime', id='field-begin_datetime', type='datetime', label=_('Zeitliche Ausdehnung (Anfang)'), placeholder=h.get_metadata_example_by_id('begin_datetime'), value=data.begin_datetime, error=errors.begin_datetime, classes=['control-full'], attrs={'data-module': 'date'}, is_required=true, description=h.get_metadata_description_by_id('begin_datetime'))  %}
+    <span class="example">zB {{ h.get_metadata_example_by_id('begin_datetime') }}</span>
+  {% endcall %}
 
-{{ form.input('end_datetime', id='field-end_datetime', type='datetime', label=_('Zeitliche Ausdehnung (Ende)'), placeholder=_('zB 2014-01-01T00:00:00.000'), value=data.end_datetime, error=errors.end_datetime, classes=['control-full'], attrs={'data-module': 'date'}) }}
+{% call form.input('end_datetime', id='field-end_datetime', type='datetime', label=_('Zeitliche Ausdehnung (Ende)'), placeholder=h.get_metadata_example_by_id('end_datetime'), value=data.end_datetime, error=errors.end_datetime, classes=['control-full'], attrs={'data-module': 'date'}, description=h.get_metadata_description_by_id('end_datetime'))  %}
+    <span class="example">zB {{ h.get_metadata_example_by_id('end_datetime') }}</span>
+  {% endcall %}
 {% endblock %}
 
 {% block package_basic_fields_org %}
@@ -89,7 +107,7 @@
   {% set dataset_has_organization = data.owner_org or data.group_id %}
   {% set organizations_available = h.organizations_available('create_dataset') %}
   {% set user_is_sysadmin = h.check_access('sysadmin') %}
-  {% set show_organizations_selector = organizations_available and (user_is_sysadmin or dataset_is_draft) %}
+  {% set show_organizations_selector = organizations_available %}
   {% set show_visibility_selector = dataset_has_organization or (organizations_available and (user_is_sysadmin or dataset_is_draft)) %}
 
   {% if show_organizations_selector and show_visibility_selector %}
@@ -99,21 +117,26 @@
   {% if show_organizations_selector %}
     {% set existing_org = data.owner_org or data.group_id %}
     <div class="control-group control-full">
-      <label for="field-organizations" class="control-label">{{ _('Veröffentlichende Stelle') }}</label>
+      <label for="field-organizations" class="control-label">{{ _('Veröffentlichende Organisation') }}</label>
       <div class="controls">
-        <select id="field-organizations" name="owner_org" data-module="autocomplete">
+        <select id="field-organization" name="owner_org" data-module="autocomplete">
           {% if h.check_config_permission('create_unowned_dataset') %}
              <option value="" {% if not selected_org and data.id %} selected="selected" {% endif %}>{{ _('No organization') }}</option>
           {% endif %}
           {% for organization in organizations_available %}
             {# get out first org from users list only if there is not an existing org #}
             {% set selected_org = (existing_org and existing_org == organization.id) or (not existing_org and not data.id and organization.id == organizations_available[0].id) %}
-            <option value="{{ organization.id }}" {% if selected_org %} selected="selected" {% endif %}>{{ organization.name }}</option>
+            <option value="{{ organization.id }}" {% if selected_org %} selected="selected" {% endif %}>{{ organization.title }}</option>
           {% endfor %}
         </select>
       </div>
+    <span class="example">zB {{ h.get_metadata_example_by_id('publisher') }}</span>      
     </div>
   {% endif %}
+
+    {% call form.input('publisher', id='field-publisher', label=_('Veröffentlichende Stelle oder Person'), placeholder=h.get_metadata_example_by_id('publisher'), value=data.publisher, error=errors.publisher, classes=['control-full'], attrs={}, description=h.get_metadata_description_by_id('publisher'))  %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('publisher') }}</span>
+    {% endcall %}  
 
   {% if show_visibility_selector %}
     {% block package_metadata_fields_visibility %}
@@ -121,11 +144,11 @@
         <label for="field-private" class="control-label">{{ _('Visibility') }}</label>
         <div class="controls">
           <select id="field-private" name="private">
-            {% for option in [('True', _('Private')), ('False', _('Public'))] %}
+            {% for option in [('False', _('Public')), ('True', _('Private'))] %}
             <option value="{{ option[0] }}" {% if option[0] == data.private|trim %}selected="selected"{% endif %}>{{ option[1] }}</option>
             {% endfor %}
           </select>
-        </div>
+        </div>      
       </div>
     {% endblock %}
   {% endif %}

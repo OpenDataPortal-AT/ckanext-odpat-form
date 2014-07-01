@@ -2,30 +2,44 @@
 
 {% block package_metadata_fields %}
   {% block package_metadata_fields_schema %}
-    {{ form.input('schema_name', label=_('Bezeichnung der Metadatenstruktur'), id='field-schema_name', placeholder=_('zB OGD Austria Metadata 2.1'), value=data.schema_name, error=errors.schema_name, classes=['control-full']) }}
+    {% call form.input('schema_name', label=_('Bezeichnung der Metadatenstruktur'), id='field-schema_name', placeholder= h.get_metadata_example_by_id('schema_name'), value=data.schema_name or 'OGD Austria Metadata 2.2', error=errors.schema_name, classes=['control-full'], description=h.get_metadata_description_by_id('schema_name'))  %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('schema_name') }}</span>
+    {% endcall %}
 
-    {{ form.input('schema_language', label=_('Sprache des Metadatensatzes'), id='field-schema_language', placeholder=_('zB ger'), value=data.schema_language, error=errors.schema_language, classes=['control-full']) }}
+    {% call form.input('schema_language', label=_('Sprache des Metadatensatzes'), id='field-schema_language', placeholder=_('zB ger'), value=data.schema_language or 'ger', error=errors.schema_language, classes=['control-full'], description=h.get_metadata_description_by_id('schema_language')) %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('schema_language') }}</span>
+    {% endcall %}
 
-    {{ form.input('schema_characterset', label=_('Character Set Code des Metadatensatzes'), id='field-schema_characterset', placeholder=_('zB utf-8'), value=data.schema_characterset, error=errors.schema_characterset, classes=['control-full']) }}
+    {% call form.input('schema_characterset', label=_('Character Set Code des Metadatensatzes'), id='field-schema_characterset', placeholder=_('zB utf-8'), value=data.schema_characterset or 'utf8', error=errors.schema_characterset, classes=['control-full'], description=h.get_metadata_description_by_id('schema_characterset')) %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('schema_characterset') }}</span>
+    {% endcall %}
   {% endblock %}
 
   {% block package_metadata_fields_metadata_linkage %}
-    {{ form.input('metadata_linkage', label=_('Weiterführende Metadaten'), id='field-metadata_linkage', placeholder='', value=data.metadata_linkage, error=errors.metadata_linkage, classes=['control-full']) }}
+    {% call form.input('metadata_linkage', label=_('Weiterführende Metadaten'), id='field-metadata_linkage', placeholder='', value=data.metadata_linkage, error=errors.metadata_linkage, classes=['control-full'], description=h.get_metadata_description_by_id('metadata_linkage')) %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('metadata_linkage') }}</span>
+    {% endcall %}
   {% endblock %}
 
   {% block package_metadata_fields_attribute_description %}
-    {{ form.markdown('attribute_description', label=_('Attributbeschreibung'), id='field-attribute_description', placeholder='', value=data.attribute_description, error=errors.attribute_description) }}
+    {% call form.markdown('attribute_description', label=_('Attributbeschreibung'), id='field-attribute_description', placeholder='', value=data.attribute_description, error=errors.attribute_description, description=h.get_metadata_description_by_id('attribute_description')) %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('attribute_description') }}</span>
+    {% endcall %}
   {% endblock %}  
 
   {% block package_metadata_fields_geo %}
-    {{ form.input('geographic_toponym', label=_('Geographische Abdeckung/Lage'), id='field-geographic_toponym', placeholder='', value=data.geographic_toponym, error=errors.geographic_toponym, classes=['control-full']) }}
+    {% call form.input('geographic_toponym', label=_('Geographische Abdeckung/Lage'), id='field-geographic_toponym', placeholder='', value=data.geographic_toponym, error=errors.geographic_toponym, classes=['control-full'], description=h.get_metadata_description_by_id('geographic_toponym')) %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('geographic_toponym') }}</span>
+    {% endcall %}
 
-    {{ form.input('geographic_bbox', label=_('Geographische Ausdehnung'), id='field-geographic_bbox', placeholder='', value=data.geographic_bbox, error=errors.geographic_bbox, classes=['control-full']) }}
+    {% call form.input('geographic_bbox', label=_('Geographische Ausdehnung'), id='field-geographic_bbox', placeholder='', value=data.geographic_bbox, error=errors.geographic_bbox, classes=['control-full'], description=h.get_metadata_description_by_id('geographic_bbox')) %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('geographic_bbox') }}</span>
+    {% endcall %}
   {% endblock %}
 
   {% block package_basic_fields_update_frequency %}
   <div class="control-group">
-    <label class="control-label" for="field-update_frequency">{{ _("Aktualisierungszyklus") }}</label>
+    <label class="control-label" for="field-update_frequency">{{ _("Aktualisierungszyklus") }} <img src="/img/help.png" alt="{{h.get_metadata_description_by_id('update_frequency')}}" title="{{ h.get_metadata_description_by_id('update_frequency') }}"/></label>
     <div class="controls">
       <select id="field-update_frequency" name="update_frequency">
         {% for freq_id, freq, f in h.frequencies %}
@@ -33,21 +47,31 @@
         {% endfor %}
       </select>
     </div>
+    <span class="example">zB {{ h.get_metadata_example_by_id('update_frequency') }}</span>
   </div>
   {% endblock %}
 
   {% block package_metadata_fields_lineage %}
-    {{ form.input('lineage_quality', label=_('Datenqualität/Herkunft'), id='field-lineage_quality', placeholder='', value=data.lineage_quality, error=errors.lineage_quality, classes=['control-full']) }}
+    {% call form.input('lineage_quality', label=_('Datenqualität/Herkunft'), id='field-lineage_quality', placeholder='', value=data.lineage_quality, error=errors.lineage_quality, classes=['control-full'], description=h.get_metadata_description_by_id('lineage_quality')) %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('lineage_quality') }}</span>
+    {% endcall %}
 
-    {{ form.input('en_title_and_desc', label=_('Titel und Beschreibung Englisch'), id='field-en_title_and_desc', placeholder='', value=data.en_title_and_desc, error=errors.en_title_and_desc, classes=['control-full']) }}
+    {% call form.input('en_title_and_desc', label=_('Titel und Beschreibung Englisch'), id='field-en_title_and_desc', placeholder='', value=data.en_title_and_desc, error=errors.en_title_and_desc, classes=['control-full'], description=h.get_metadata_description_by_id('en_title_and_desc')) %}
+    {% endcall %}
 
-    {{ form.input('license_citation', label=_('Lizenz Zitat'), id='field-license_citation', placeholder='', value=data.license_citation, error=errors.license_citation, classes=['control-full']) }}
+    {% call form.input('license_citation', label=_('Lizenz Zitat'), id='field-license_citation', placeholder='', value=data.license_citation, error=errors.license_citation, classes=['control-full'], description=h.get_metadata_description_by_id('license_citation')) %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('license_citation') }}</span>
+    {% endcall %}
   {% endblock %}
 
   {% block package_metadata_fields_2_2 %}
-    {{ form.input('metadata_original_portal', label=_('Link zu den ursprünglichen Metadaten'), id='field-metadata_original_portal', placeholder='', value=data.metadata_original_portal, error=errors.metadata_original_portal, classes=['control-full']) }}
+    {% call form.input('metadata_original_portal', label=_('Link zu den ursprünglichen Metadaten'), id='field-metadata_original_portal', placeholder='', value=data.metadata_original_portal, error=errors.metadata_original_portal, classes=['control-full'], description=h.get_metadata_description_by_id('metadata_original_portal')) %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('metadata_original_portal') }}</span>
+    {% endcall %}
 
-    {{ form.input('maintainer_email', label=_('Datenverantwortliche Stelle – E-Mailkontakt'), id='field-maintainer_email', placeholder='', value=data.maintainer_email, error=errors.maintainer_email, classes=['control-full']) }}
+    {% call form.input('maintainer_email', label=_('Datenverantwortliche Stelle – E-Mailkontakt'), id='field-maintainer_email', placeholder='', value=data.maintainer_email, error=errors.maintainer_email, classes=['control-full'], description=h.get_metadata_description_by_id('maintainer_email')) %}
+      <span class="example">zB {{ h.get_metadata_example_by_id('maintainer_email') }}</span>
+    {% endcall %}
 
   {% endblock %}
 

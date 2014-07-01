@@ -50,6 +50,7 @@ class OdpatDatasetFormPlugin(plugins.SingletonPlugin, toolkit.DefaultDatasetForm
         map.connect('/dataset/{id}/resource/{resource_id}/embed', controller='ckanext.odpat_form.controllers.odpat:OdpPackageController', action='resource_embedded_dataviewer')
         map.connect('/dataset/{id}/resource_edit/{resource_id}', controller='ckanext.odpat_form.controllers.odpat:OdpatPackageController', action='resource_edit')     
         map.connect('/dataset/new_resource/{id}', controller='ckanext.odpat_form.controllers.odpat:OdpatPackageController', action='new_resource')
+        map.connect('/dataset/new_metadata/{id}', controller='ckanext.odpat_form.controllers.odpat:OdpatPackageController', action='new_metadata')
         return map
 
     def after_map(self, map):

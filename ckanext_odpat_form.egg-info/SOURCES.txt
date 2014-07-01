@@ -18,6 +18,7 @@ ckanext/odpat_form/templates/package/snippets/additional_info.html
 ckanext/odpat_form/templates/package/snippets/package_basic_fields.html
 ckanext/odpat_form/templates/package/snippets/package_form.html
 ckanext/odpat_form/templates/package/snippets/package_metadata_fields.html
+ckanext/odpat_form/templates/package/snippets/package_metadata_form.html
 ckanext/odpat_form/templates/package/snippets/resource_form.html
 ckanext_odpat_form.egg-info/PKG-INFO
 ckanext_odpat_form.egg-info/SOURCES.txt
